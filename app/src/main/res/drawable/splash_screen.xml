@@ -4,7 +4,7 @@
     <!-- Your product logo - 144dp color version of your app icon -->
     <item>
         <bitmap
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/login_background"
             android:gravity="center"/>
     </item>
 </layer-list>

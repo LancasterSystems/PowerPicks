@@ -141,18 +141,21 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="20dp"
+                android:id="@+id/google_btn"
                 android:src="@drawable/google"
                 android:contentDescription="@string/google_icon"/>
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="20dp"
+                android:id="@+id/fb_btn"
                 android:src="@drawable/fb"
                 android:contentDescription="@string/fb_icon"/>
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="20dp"
+                android:id="@+id/twitter_btn"
                 android:src="@drawable/twitter"
                 android:contentDescription="@string/twitter_icon"/>
 
