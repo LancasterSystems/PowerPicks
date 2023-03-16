@@ -56,20 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 signOutGoogle();
             }
         });
-        /*
-        boolean isUserLoggedIn = false;
-        setTheme(R.style.Theme_PowerPicks);
-        super.onCreate(savedInstanceState);
-        if (!isUserLoggedIn) {
-            setContentView(R.layout.activity_login);
-        }
-        else {
-            //Navigate to Main Activity
-            setContentView(R.layout.activity_main);
-
-         }
-
-         */
     }
 
     private void signOutGoogle()
