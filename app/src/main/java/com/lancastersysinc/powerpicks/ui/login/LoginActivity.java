@@ -2,6 +2,7 @@ package com.lancastersysinc.powerpicks.ui.login;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +26,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,26 +47,34 @@ import com.lancastersysinc.powerpicks.ui.login.LoginViewModel;
 import com.lancastersysinc.powerpicks.ui.login.LoginViewModelFactory;
 import com.lancastersysinc.powerpicks.databinding.ActivityLoginBinding;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
-    // Google Sign-in variables
+    // Google sign-in variables
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView googleBtn;
+
+    // Facebook sign-in variables
+    ImageView fbBtn;
+    CallbackManager callbackManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //LOGIN WITH EMAIL (FIREBASE)
-        TextView username = (TextView) findViewById(R.id.username);
-        TextView password = (TextView) findViewById(R.id.password);
+        // LOGIN WITH EMAIL (FIREBASE)
+        TextView username = findViewById(R.id.username);
+        TextView password = findViewById(R.id.password);
 
-        //LOGIN WITH GOOGLE
+        // LOGIN WITH GOOGLE
         googleBtn = findViewById(R.id.google_btn);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
@@ -75,10 +92,56 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+        //LOGIN WITH FACEBOOK
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this.getApplication());
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logOut();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken!=null && !accessToken.isExpired()){
+            Intent intent = new Intent(LoginActivity.this,
+                    MainActivity.class);
+            startActivity(intent);
+        }
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // navigate to main activity
+                        Intent intent = new Intent(LoginActivity.this,
+                                MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(@NonNull FacebookException exception) {
+                        // App code
+                    }
+                });
+
+
+        fbBtn = findViewById(R.id.fb_btn);
+        fbBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // login to facebook
+
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this,
+                        Collections.singletonList("public_profile"));
+
+            }
+
+        });
 
 
 
-        MaterialButton loginbtn = (MaterialButton) findViewById(R.id.loginbtn);
+        MaterialButton loginbtn = findViewById(R.id.loginbtn);
 
         //admin and admin
 
@@ -105,8 +168,10 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, 1000);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);

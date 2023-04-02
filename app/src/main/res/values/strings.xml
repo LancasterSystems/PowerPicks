@@ -19,4 +19,14 @@
     <string name="fb_icon">fb_icon</string>
     <string name="twitter_icon">twitter_icon</string>
     <string name="or_sign_in_with">or sign in with</string>
+    <string name="email">Email</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="name">Name</string>
+
+    <!-- FACEBOOK LOGIN STRINGS -->
+    <string name="facebook_app_id">3335220466739079</string>
+    <string name="fb_login_protocol_scheme">fb3335220466739079</string>
+    <string name="facebook_client_token">f91437e9664949822c0d443db35f06f4</string>
+
+
 </resources>
